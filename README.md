@@ -1,22 +1,34 @@
 # MonoPsycheReader
-A ruby gem with a CLI program to read my mono_psyches monologues.
+A ruby gem with a CLI program to read mono_psyches monologues.
 
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Clone it:
 
-```ruby
-gem 'mono_psyche_reader'
-```
+    $ git clone https://github.com/mash-97/mono_psyche_reader.git
 
-And then execute:
+go to the `mono_psyche_reader` directory And then in the terminal execute:
 
     $ bundle install
 
-Or install it yourself as:
+then install as a gem via rake:
 
-    $ gem install mono_psyche_reader
+    $ rake install:local
+
+or you can do it via `gem`:
+```bash
+gem build mono_psyche_reader
+gem install --local mono_psyche_reader
+```
+
+now you can use it like:
+
+```ruby
+  require 'mono_psyche_reader'
+```
+
+Currently it won't be uploaded to https://rubygems.org as a stand-alone gem.
 
 ## Usage
 
@@ -40,4 +52,3 @@ The gem is available as open source under the terms of the [MIT License](https:/
 ## Code of Conduct
 
 Everyone interacting in the MonoPsycheReader project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/mono_psyche_reader/blob/master/CODE_OF_CONDUCT.md).
-
