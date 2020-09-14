@@ -1,6 +1,7 @@
 # MonoPsycheReader
-A ruby gem with a CLI program to read mono_psyches monologues.
+A ruby gem with to read mono_psyches monologues.
 
+## Description 
 
 ## Installation
 
@@ -17,6 +18,7 @@ then install as a gem via rake:
     $ rake install:local
 
 or you can do it via `gem`:
+
 ```bash
 gem build mono_psyche_reader
 gem install --local mono_psyche_reader
