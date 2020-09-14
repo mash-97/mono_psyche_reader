@@ -1,7 +1,7 @@
 module MonoPsycheReader
   module MonoPsycheReminder
     class Collection
-      REGEXP = /\[(.+?)\|(.+?)\|(.+?)\][ \t]*?\((.*?)\)/
+      REGEXP = /(\[(.+?)\|(.+?)\|(.+?)\][ \t\n]*?\(([\s\S]*?)\))/
 
       attr_accessor :file_path
       attr_accessor :whole_string
@@ -13,7 +13,7 @@ module MonoPsycheReader
       attr_accessor :checked_in
 
       def initialize(string, file_path=nil)
-        @whole_string, @type_name, @act_of_time, @priority, @message =  self.class::parse(string)
+        @whole_string, @type_name, @act_of_time, @priority, @message =  self.class::parse(string, (1..5))
         raise("UnmatchableString") if @whole_string==false
 
         @priority = @priority.to_i
@@ -28,7 +28,7 @@ module MonoPsycheReader
         return false if (not @file_path) or (not File.exist?(@file_path))
 
         # make the string with checked-in mark
-        checkedin_string = makeCheckedString(@whole_string)
+        checkedin_string = makeCheckedString()
 
         # fetch-out text from the file
         text = File.readlines(@file_path).join()
@@ -57,8 +57,19 @@ module MonoPsycheReader
         return $~[range]
       end
 
+      def self.generate_scanner_regexp()
+        rgxs =  self::REGEXP.source.gsub("\\(", "__<__")
+          .gsub("(?i)", "<!i>")
+          .gsub("\\)", "__>__")
+          .gsub("(", "")
+          .gsub(")", "")
+          .gsub("__<__", "\\(")
+          .gsub("__>__", "\\)")
+          .gsub("<!i>", "(?i)")
+        return Regexp.new(rgxs)
+      end
       def self.check_if_checked(string)
-        return true if string =~ /\|\!\*\!\]/
+        return true if string =~ /\|\!\!\]/
         return false
       end
 
@@ -66,11 +77,10 @@ module MonoPsycheReader
         return false if not string =~ self::REGEXP
         return true
       end
-
       protected
-        # checked-in mark is: !*!
+        # checked-in mark is: !!
         def makeCheckedString()
-          @whole_string.sub("]", "|!*!]")
+          @whole_string.sub("]", "|!!]")
         end
     end
   end

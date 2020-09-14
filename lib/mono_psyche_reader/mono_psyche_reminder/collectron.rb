@@ -17,3 +17,6 @@ module MonoPsycheReader
       elsif Task::parsable(string) then
         collection = Task.new(string)
       end
+    end
+  end
+end
