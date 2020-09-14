@@ -2,11 +2,13 @@ require 'test_helper'
 
 class ReminderTest < Minitest::Test
   String_1 = "[Reminder|*|*] (this is a test.)"
-  String_2 = "[reminder|12/9/2020 :: 5:30 am|7](this is another test.)"
+  String_2 = "[reminder|2020/9/12 :: 5:30 am|7](this is another test.)"
   String_3 = "[reminder|_|_|_|_|]"
+  String_4 = "[reminder|2022/9/12 :: 5:30 am|7](remind me this message at the year of 2022 at 5:30 am)"
 
   R1 = Reminder.new(String_1)
   R2 = Reminder.new(String_2)
+  R4 = Reminder.new(String_4)
 
   def test_reminder_parsing()
     assert_raises("UnmatchableString") do
@@ -19,20 +21,27 @@ class ReminderTest < Minitest::Test
 
     assert_equal(String_1, R1.whole_string)
     assert_equal("Reminder", R1.type_name)
-    assert_equal("*", R1.act_of_time)
+    assert_equal("*", R1.time_of_act)
     assert_equal(0, R1.priority)
     assert_equal("this is a test.", R1.message)
 
 
     assert_equal(String_2, R2.whole_string)
     assert_equal("reminder", R2.type_name)
-    assert_equal("12/9/2020 :: 5:30 am", R2.act_of_time)
+    assert_equal("*", R2.time_of_act)
     assert_equal(7, R2.priority)
     assert_equal("this is another test.", R2.message)
   end
 
+  def test_time_of_act()
+    assert_equal("*", R1.time_of_act)
+    assert_equal("*", R2.time_of_act)
+    assert_equal("2022/9/12 :: 5:30 am", R4.timeAnify())
+  end
+
   def test_mark_checker()
-    mpfn = "./assets/test.mp"
+    assets_directory = File.join(File.absolute_path(__dir__), "assets")
+    mpfn = File.join(assets_directory, "test.mp")
     reminders = [
       "[Reminder|12/9/2020|3]
       (Hello! This is a mono-psyche test)",
@@ -47,7 +56,7 @@ class ReminderTest < Minitest::Test
               priority 10)"
     ]
 
-    FileUtils.mkpath("./assets")
+    FileUtils.mkpath(assets_directory)
     File.open(mpfn, "w") do |mpf|
       reminders.each{|r|mpf.puts(r)}
     end
@@ -81,7 +90,7 @@ class ReminderTest < Minitest::Test
     reminders.each_with_index do |reminder_string, index|
       abstracted_test.call(reminder_string, index+1)
     end
-    FileUtils.remove_dir("./assets")
+    FileUtils.remove_dir(assets_directory)
   end
 
   def fetch_reminders_from(file_path)

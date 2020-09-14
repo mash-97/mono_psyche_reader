@@ -1,0 +1,31 @@
+GIT
+  remote: https://github.com/mash-97/mashz.git
+  revision: a3bf8dc4608d411182717653d81a0258efd54979
+  branch: master
+  specs:
+    mashz (0.2.0)
+
+PATH
+  remote: .
+  specs:
+    mono_psyche_reader (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    chronic (0.10.2)
+    minitest (5.14.2)
+    rake (12.3.3)
+
+PLATFORMS
+  x64-mingw32
+
+DEPENDENCIES
+  chronic
+  mashz!
+  minitest (~> 5.0)
+  mono_psyche_reader!
+  rake (~> 12.0)
+
+BUNDLED WITH
+   2.1.4

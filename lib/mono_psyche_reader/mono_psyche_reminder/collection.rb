@@ -7,16 +7,17 @@ module MonoPsycheReader
       attr_accessor :whole_string
       attr_accessor :type_name
       attr_accessor :priority
-      attr_accessor :act_of_time
+      attr_accessor :time_of_act
       attr_accessor :message
 
       attr_accessor :checked_in
 
       def initialize(string, file_path=nil)
-        @whole_string, @type_name, @act_of_time, @priority, @message =  self.class::parse(string, (1..5))
-        raise("UnmatchableString") if @whole_string==false
+        @whole_string, @type_name, @time_of_act, @priority, @message =  self.class::parse(string, (1..5))
+        raise("UnmatchableString") if @whole_string==false or @type_name==nil
 
-        @priority = @priority.to_i
+        @time_of_act = timeAnify()
+        @priority = @priority.to_i  # "*" or any characters will be accepted as 0 priority
         @file_path = file_path.dup() if file_path
         @checked_in = self.class::check_if_checked(@whole_string)
       end
@@ -45,11 +46,11 @@ module MonoPsycheReader
       end
 
       def timeAnify()
-        return @act_of_time if @act_of_time=="*"
-        time = Chronic::parse(@act_of_time)
+        return @time_of_act if @time_of_act=="*"
+        time = Chronic::parse(@time_of_act)
         return false if not time
-        @act_of_time = "*" if time <= Time.now
-        return @act_of_time
+        @time_of_act = "*" if time <= Time.now
+        return @time_of_act
       end
 
       def self.parse(string, range=(0..4))
@@ -69,7 +70,7 @@ module MonoPsycheReader
         return Regexp.new(rgxs)
       end
       def self.check_if_checked(string)
-        return true if string =~ /\|\!\!\]/
+        return true if string =~ /\|\]/
         return false
       end
 
@@ -80,7 +81,7 @@ module MonoPsycheReader
       protected
         # checked-in mark is: !!
         def makeCheckedString()
-          @whole_string.sub("]", "|!!]")
+          @whole_string.sub("]", "|]")
         end
     end
   end
