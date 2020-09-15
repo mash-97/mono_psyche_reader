@@ -40,7 +40,7 @@ class ReminderTest < Minitest::Test
   end
 
   def test_mark_checker()
-    assets_directory = File.join(File.absolute_path(__dir__), "assets")
+    assets_directory = File.join(File.absolute_path(__dir__), "reminder_test")
     mpfn = File.join(assets_directory, "test.mp")
     reminders = [
       "[Reminder|12/9/2020|3]

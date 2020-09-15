@@ -69,6 +69,7 @@ module MonoPsycheReader
           .gsub("<!i>", "(?i)")
         return Regexp.new(rgxs)
       end
+
       def self.check_if_checked(string)
         return true if string =~ /\|\]/
         return false
@@ -78,6 +79,7 @@ module MonoPsycheReader
         return false if not string =~ self::REGEXP
         return true
       end
+      
       protected
         # checked-in mark is: !!
         def makeCheckedString()
