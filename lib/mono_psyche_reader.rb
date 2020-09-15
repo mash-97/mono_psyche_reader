@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "mashz"
 require "chronic"
 require "mono_psyche_reader/version"
 require "mono_psyche_reader/mono_psyche_reminder/mono_psyche_reminder"

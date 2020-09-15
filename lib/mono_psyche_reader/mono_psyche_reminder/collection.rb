@@ -1,7 +1,8 @@
 module MonoPsycheReader
   module MonoPsycheReminder
     class Collection
-      REGEXP = /(\[(.+?)\|(.+?)\|(.+?)\][ \t\n]*?\(([\s\S]*?)\))/
+      REGEXP = /(\[(.*?)\][ \t\n]*?\(([\s\S]*?)\))/
+
 
       attr_accessor :file_path
       attr_accessor :whole_string
@@ -13,8 +14,10 @@ module MonoPsycheReader
       attr_accessor :checked_in
 
       def initialize(string, file_path=nil)
-        @whole_string, @type_name, @time_of_act, @priority, @message =  self.class::parse(string, (1..5))
-        raise("UnmatchableString") if @whole_string==false or @type_name==nil
+        raise("UnmatchableString") if not string.match(self.class::REGEXP)
+        @whole_string = $~[1]
+        @type_name, @time_of_act, @priority = $~[2].split("|")
+        @message = $~[3]
 
         @time_of_act = timeAnify()
         @priority = @priority.to_i  # "*" or any characters will be accepted as 0 priority
@@ -48,14 +51,13 @@ module MonoPsycheReader
       def timeAnify()
         return @time_of_act if @time_of_act=="*"
         time = Chronic::parse(@time_of_act)
-        return false if not time
+        return @time_of_act if not time
         @time_of_act = "*" if time <= Time.now
         return @time_of_act
       end
 
-      def self.parse(string, range=(0..4))
-        return false if not string.match(self::REGEXP)
-        return $~[range]
+      def self.definator_parse(string)
+        return string.split("|")
       end
 
       def self.generate_scanner_regexp()
@@ -71,19 +73,20 @@ module MonoPsycheReader
       end
 
       def self.check_if_checked(string)
-        return true if string =~ /\|\]/
+        return true if string =~ /\|\!\]/
         return false
       end
 
       def self.parsable(string)
-        return false if not string =~ self::REGEXP
+        return false if not string =~ self::SCANNER_REGEXP
         return true
       end
-      
+      SCANNER_REGEXP = self.generate_scanner_regexp()
+
       protected
         # checked-in mark is: !!
         def makeCheckedString()
-          @whole_string.sub("]", "|]")
+          @whole_string.sub("]", "|!]")
         end
     end
   end

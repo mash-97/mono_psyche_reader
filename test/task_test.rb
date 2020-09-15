@@ -4,7 +4,7 @@ class TaskTest < Minitest::Test
   String1 = "[task|2020/9/12 :: 5:30 am|1|true] (ruby /home/mash/tests/test.rb)"
   String2 = "[task|*|*|false](ruby /home/update_mps.rb)"
   String3 = "[task|alkdf|alkdf|ldkfja|alkjdf|alkdjf|flakjd](ruby /home/update_mashz.rb)"
-  String4 = "[task|*|*|*|*|](ruby check_if_checked.rb)"
+  String4 = "[task|*|*|*|*|!](ruby check_if_checked.rb)"
   T1 = Task.new(String1)
   T2 = Task.new(String2)
 
@@ -17,10 +17,12 @@ class TaskTest < Minitest::Test
       Task.new("[reminder|2020/9/12|*|true](ls)")
     end
     assert_equal(false, T1.checked_in)
+    assert_equal("ruby /home/mash/tests/test.rb", T1.command)
     assert_equal(true, T1.auto)
 
     assert_equal(false, T2.checked_in)
     assert_equal(false, T2.auto)
+    assert_equal("ruby /home/update_mps.rb", T2.command)
 
     assert_equal(true, Task::check_if_checked(String4))
     assert_equal(1, T1.priority)
@@ -85,6 +87,8 @@ class TaskTest < Minitest::Test
 
   def fetch_tasks_from(file_path)
     results = File.readlines(file_path).join().scan(Task::SCANNER_REGEXP)
+    results = results.select{|r| not Task::check_if_checked(r)}
+
     puts("\n\nSCANNER_REGEXP: #{Task::SCANNER_REGEXP.source}")
     puts("------------------ fetched_tasks -----------------")
     puts results.join("\n")

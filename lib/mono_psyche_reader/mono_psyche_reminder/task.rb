@@ -1,14 +1,15 @@
 module MonoPsycheReader
   module MonoPsycheReminder
     class Task < Collection
-      REGEXP = /(\[((?i)task)\|(.+?)\|(.+?)\|([^|]+?)\][ \t\n]*?\(([\s\S]*?)\))/
-      SCANNER_REGEXP = self.generate_scanner_regexp()
+
       attr_accessor :command
       attr_accessor :auto
 
       def initialize(string, file_path=nil)
-        @whole_string, @type_name, @time_of_act, @priority, @auto, @command =  self.class::parse(string, 1..6)
-        raise("UnmatchableString") if not (@whole_string||@type_name||@time_of_act||@priority||@auto||@command)
+        raise("UnmatchableString") if not string.match(self.class::REGEXP)
+        @whole_string = $~[1]
+        @type_name, @time_of_act, @priority, @auto = $~[2].split("|")
+        @command = $~[3]
 
         @time_of_act = timeAnify()
         @priority = @priority.to_i

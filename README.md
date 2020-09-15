@@ -1,7 +1,7 @@
 # MonoPsycheReader
-A ruby gem with to read mono_psyches monologues.
+A ruby gem to read mono_psyches monologues.
 
-## Description 
+## Description
 
 ## Installation
 

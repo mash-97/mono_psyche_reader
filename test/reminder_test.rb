@@ -1,10 +1,12 @@
 require 'test_helper'
+require_relative 'test_assets'
 
 class ReminderTest < Minitest::Test
   String_1 = "[Reminder|*|*] (this is a test.)"
   String_2 = "[reminder|2020/9/12 :: 5:30 am|7](this is another test.)"
   String_3 = "[reminder|_|_|_|_|]"
   String_4 = "[reminder|2022/9/12 :: 5:30 am|7](remind me this message at the year of 2022 at 5:30 am)"
+  String_5 = "[reminder|*|*|*|*|*] (this string with 5 stars.)"
 
   R1 = Reminder.new(String_1)
   R2 = Reminder.new(String_2)
@@ -31,6 +33,14 @@ class ReminderTest < Minitest::Test
     assert_equal("*", R2.time_of_act)
     assert_equal(7, R2.priority)
     assert_equal("this is another test.", R2.message)
+
+    reminder =  MonoPsycheReminder::Reminder.new(String_5)
+    assert_equal(String_5, reminder.whole_string)
+    assert_equal("reminder", reminder.type_name)
+    assert_equal("*", reminder.time_of_act)
+    assert_equal(0, reminder.priority)
+    assert_equal("this string with 5 stars.", reminder.message)
+
   end
 
   def test_time_of_act()
@@ -93,12 +103,23 @@ class ReminderTest < Minitest::Test
     FileUtils.remove_dir(assets_directory)
   end
 
+  # def test_with_assets()
+  #   TestAssets::Reminder::create_rmpf()
+  #   TestAssets::Reminder::Reminders.each do
+  #     |reminder_string|
+  #     reminder = MonoPsycheReminder::Reminder.new(reminder_string)
+  #   end
+  # end
+
   def fetch_reminders_from(file_path)
     results = File.readlines(file_path).join().scan(Reminder::SCANNER_REGEXP)
-    puts("\n\nSCANNER_REGEXP: #{Reminder::SCANNER_REGEXP.source}")
+    results = results.select{|r| not Reminder::check_if_checked(r)}
+    puts("\n\n")
+    puts("SCANNER_REGEXP: #{Reminder::SCANNER_REGEXP.source}")
     puts("------------------fetched_reminders-----------------")
     puts results.join("\n")
     puts("----------------------------------------------------------")
+    puts("\n\n")
     return results
   end
 
