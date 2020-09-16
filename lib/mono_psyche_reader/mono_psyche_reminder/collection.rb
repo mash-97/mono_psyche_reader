@@ -10,7 +10,7 @@ module MonoPsycheReader
       attr_accessor :priority
       attr_accessor :time_of_act
       attr_accessor :message
-
+      attr_accessor :date 
       attr_accessor :checked_in
 
       def initialize(string, file_path=nil)

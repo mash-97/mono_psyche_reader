@@ -10,7 +10,7 @@ class CollectronTest < Minitest::Test
         if collection.class==Reminder then
           collection.message
         else
-          collection.command
+          collection.message
         end
       }.join("\n--> "))
     puts("================================ #{collectron.collections.length()} =========================================")

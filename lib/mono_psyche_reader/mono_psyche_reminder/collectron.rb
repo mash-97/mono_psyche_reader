@@ -1,7 +1,10 @@
 module MonoPsycheReader
   module MonoPsycheReminder
     class Collectron
+      DATE_REGEXP = /==>(.+?)\n/
+
       attr_accessor :file_path
+      attr_accessor :date
       attr_accessor :collection_strings
       attr_accessor :reminders
       attr_accessor :tasks
@@ -10,17 +13,32 @@ module MonoPsycheReader
         @file_path = file_path.dup()
         @reminders = []
         @tasks = []
+
+        @date = Collectron::parse_date(@file_path)
         @collection_strings = Collectron::collect(file_path)
         @collection_strings.each do
           |collection_string|
-          @reminders << Reminder.new(collection_string, @file_path) if collection_string =~ /^\[(?i)reminder/
-          @tasks << Task.new(collection_string, @file_path) if collection_string =~ /^\[(?i)task/
+          if collection_string =~ /^\[(?i)reminder/ then
+            reminder = Reminder.new(collection_string, @file_path)
+            reminder.date = @date
+            @reminders << reminder
+          elsif collection_string =~ /^\[(?i)task/ then
+            task = Task.new(collection_string, @file_path)
+            task.date = @date
+            @tasks << task
+          end
         end
+
       end
 
       def collections()
         return @reminders + @tasks
-      end 
+      end
+
+      def self.parse_date(file_path)
+        text = File.readlines(file_path).join()
+        return text.match(Collectron::DATE_REGEXP)!=nil ? Chronic.parse($~[1]) : nil
+      end
 
       def self.collect(file_path)
         text = File.readlines(file_path).join()

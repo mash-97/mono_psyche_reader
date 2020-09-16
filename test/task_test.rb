@@ -17,12 +17,12 @@ class TaskTest < Minitest::Test
       Task.new("[reminder|2020/9/12|*|true](ls)")
     end
     assert_equal(false, T1.checked_in)
-    assert_equal("ruby /home/mash/tests/test.rb", T1.command)
+    assert_equal("ruby /home/mash/tests/test.rb", T1.message)
     assert_equal(true, T1.auto)
 
     assert_equal(false, T2.checked_in)
     assert_equal(false, T2.auto)
-    assert_equal("ruby /home/update_mps.rb", T2.command)
+    assert_equal("ruby /home/update_mps.rb", T2.message)
 
     assert_equal(true, Task::check_if_checked(String4))
     assert_equal(1, T1.priority)
