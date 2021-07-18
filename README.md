@@ -30,7 +30,6 @@ now you can use it like:
   require 'mono_psyche_reader'
 ```
 
-Currently it won't be uploaded to https://rubygems.org as a stand-alone gem.
 
 ## Usage
 
