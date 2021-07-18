@@ -10,9 +10,8 @@ class MonoPsycheReminderTest < Minitest::Test
 
   def test_mono_psyche_reminder()
     self.create_mp_files()
-    __mpr__ = MonoPsycheReader::MonoPsycheReminder::MonoPsycheReminder
 
-    mpr = __mpr__.new(*[TestAssets::Collectron::CMPF, TestAssets::Reminder::RMPF, TestAssets::Task::TMPF])
+    mpr = MonoPsycheReader::MPR.new(*[TestAssets::Collectron::CMPF, TestAssets::Reminder::RMPF, TestAssets::Task::TMPF])
     puts("=========== mpr.collections ============")
     mpr.collections.each_with_index do |collection, index|
       puts("\n\n")
@@ -23,5 +22,6 @@ class MonoPsycheReminderTest < Minitest::Test
       puts("Date: #{collection.date}")
       puts("--------------------------------------------------\n\n")
     end
+    TestAssets::remove_assets()
   end
 end

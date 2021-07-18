@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mash-97/mashz.git
-  revision: a3bf8dc4608d411182717653d81a0258efd54979
+  revision: 3d0cb3b24af6298f8ebf2a969edb2efcc21c6de7
   branch: master
   specs:
     mashz (0.2.0)
@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    mono_psyche_reader (0.1.0)
+    mono_psyche_reader (0.5.0)
 
 GEM
   remote: https://rubygems.org/

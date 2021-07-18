@@ -3,14 +3,13 @@ module MonoPsycheReader
     class Collection
       REGEXP = /(\[(.*?)\][ \t\n]*?\(([\s\S]*?)\))/
 
-
       attr_accessor :file_path
       attr_accessor :whole_string
       attr_accessor :type_name
       attr_accessor :priority
       attr_accessor :time_of_act
       attr_accessor :message
-      attr_accessor :date 
+      attr_accessor :date
       attr_accessor :checked_in
 
       def initialize(string, file_path=nil)

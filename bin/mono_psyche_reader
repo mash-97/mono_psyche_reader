@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+lib_path = File.expand_path("../lib", __dir__)
+$LOAD_PATH.unshift(lib_path) unless $LOAD_PATH.include?(lib_path)
+
+require 'mono_psyche_reader'
+require 'thor'
+
+class MonoPsycheReaderCLI < Thor
+  desc "show --from FILES", "show mono psyches from FILES"
+  option :from
+  def show()
+  end
+end
